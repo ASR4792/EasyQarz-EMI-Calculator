@@ -40,7 +40,7 @@ EasyQarz is a Streamlit web application for calculating loan EMIs with Islamic b
 
 ### Deployment
 - Live App: [EasyQarz on Streamlit Share](https://easyapprz-emi-calculator-nfn8ayj2hfrhplfkkknfex.streamlit.app/)
-- GitHub Repository: ASR4792/EasyQarz-EMI-Calculator
+- GitHub Repository: https://github.com/ASR4792/EasyQarz-EMI-Calculator
 
 ### How to Use
 - Adjust loan parameters using interactive sliders:
