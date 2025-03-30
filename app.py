@@ -1,8 +1,17 @@
+import sys
+import numpy as np
+
+# Monkey-patch for NumPy 2.0 compatibility
+if not hasattr(np, 'unicode_'):
+    np.unicode_ = str  # Use Python's native str type
+    np.bytes_ = bytes
+
+sys.modules['numpy'].unicode_ = str
+sys.modules['numpy'].bytes_ = bytes
 import streamlit as st
 import pandas as pd
 import plotly.express as px
 import numpy as np
-from streamlit_extras.metric_cards import style_metric_cards
 
 # Page Config
 st.set_page_config(
@@ -23,33 +32,30 @@ st.markdown("""
         color: #2E7D32 !important;
     }
     
-    /* Horizontal Cards */
-    .horizontal-cards {
-        display: flex;
-        gap: 15px;
-        margin-bottom: 25px;
-    }
-    .metric-card {
+    /* Enhanced Metric Cards */
+    div[data-testid="metric-container"] {
         background: white;
         border-radius: 10px;
         padding: 15px;
-        flex: 1;
         box-shadow: 0 4px 12px rgba(0,0,0,0.08);
         border-top: 3px solid #4CAF50;
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        transition: all 0.3s ease;
     }
-    .metric-card:hover {
-        transform: scale(1.05);
-        box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+    div[data-testid="metric-container"]:hover {
+        transform: scale(1.02);
+        box-shadow: 0 6px 16px rgba(0,0,0,0.15) !important;
     }
-    .metric-title {
+    div[data-testid="metric-container"] > div {
+        justify-content: center;
+    }
+    [data-testid="stMetricLabel"] {
+        justify-content: center;
         font-size: 14px;
         color: #555;
     }
-    .metric-value {
+    [data-testid="stMetricValue"] {
         font-size: 22px;
         font-weight: bold;
-        color: #2E7D32;
     }
     
     /* Chart Hover Effect */
@@ -64,7 +70,29 @@ st.markdown("""
         padding: 20px;
         color: #666;
     }
+    
+    /* Pakistan Flag Watermark */
+    .watermark {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        opacity: 0.5;
+        z-index: 1000;
+        filter: drop-shadow(0 0 5px rgba(0,0,0,0.2));
+    }
 </style>
+""", unsafe_allow_html=True)
+
+# ---- Pakistan Flag Watermark ----
+st.markdown("""
+<div class="watermark">
+    <svg width="80" height="53" viewBox="0 0 60 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="60" height="40" fill="#01411C"/>
+        <rect x="20" width="20" height="40" fill="white"/>
+        <circle cx="30" cy="20" r="6" fill="#01411C"/>
+        <circle cx="34" cy="20" r="6" fill="white"/>
+    </svg>
+</div>
 """, unsafe_allow_html=True)
 
 # ---- CALCULATION FUNCTIONS ----
@@ -137,28 +165,33 @@ schedule_df = generate_schedule(loan_amount, interest_rate, tenure_years, islami
 # ---- MAIN DISPLAY ----
 st.title("📊 Payment Overview")
 
-# 1. Horizontal Cards
-st.markdown(f"""
-<div class="horizontal-cards">
-    <div class="metric-card">
-        <div class="metric-title">Monthly Payment</div>
-        <div class="metric-value">PKR {monthly_payment:,.2f}</div>
-    </div>
-    <div class="metric-card">
-        <div class="metric-title">Total {'Profit' if islamic_mode else 'Interest'}</div>
-        <div class="metric-value">PKR {total_interest:,.2f}</div>
-    </div>
-    <div class="metric-card">
-        <div class="metric-title">Total Payment</div>
-        <div class="metric-value">PKR {total_payment:,.2f}</div>
-    </div>
-</div>
-""", unsafe_allow_html=True)
+# 1. Metrics Cards (Native Streamlit)
+col1, col2, col3 = st.columns(3)
+with col1:
+    st.metric(
+        label="Monthly Payment",
+        value=f"PKR {monthly_payment:,.2f}",
+        delta_color="off"
+    )
+
+with col2:
+    st.metric(
+        label=f"Total {'Profit' if islamic_mode else 'Interest'}",
+        value=f"PKR {total_interest:,.2f}",
+        delta_color="off"
+    )
+
+with col3:
+    st.metric(
+        label="Total Payment",
+        value=f"PKR {total_payment:,.2f}",
+        delta_color="off"
+    )
 
 # 2. Charts
-col1, col2 = st.columns([1, 2])
+chart_col1, chart_col2 = st.columns([1, 2])
 
-with col1:
+with chart_col1:
     st.markdown("### Payment Composition")
     if islamic_mode:
         fig_pie = px.pie(
@@ -176,7 +209,7 @@ with col1:
         )
     st.plotly_chart(fig_pie, use_container_width=True)
 
-with col2:
+with chart_col2:
     st.markdown("### Payment Schedule")
     if islamic_mode:
         fig = px.area(
@@ -216,8 +249,8 @@ st.markdown("""
     </p>
     <p style="color:#666; font-size:14px;">
         Built with ❤️ by <strong>Ahmed Saleh Riaz</strong> | 
-        <a href="https://www.linkedin.com/in/ahmed-saleh-riaz/" style="color:#4CAF50; text-decoration:none;">LinkedIn</a> | 
-        <a href="https://github.com/ASR4792" style="color:#4CAF50; text-decoration:none;">GitHub</a>
+        <a href="https://www.linkedin.com/in/ahmed-saleh-riaz/" target="_blank" style="color:#4CAF50; text-decoration:none;">LinkedIn</a> | 
+        <a href="https://github.com/ASR4792" target="_blank" style="color:#4CAF50; text-decoration:none;">GitHub</a>
     </p>
 </div>
 """, unsafe_allow_html=True)
