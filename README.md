@@ -1,5 +1,5 @@
 # EasyQarz - Pakistan EMI Calculator 🇵🇰
-[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://easyapprz-emi-calculator-2pmjsqccrxetwy3jpd64zi.streamlit.app/)
+[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://easyapprz-emi-calculator-nfn8ayj2hfrhplfkkknfex.streamlit.app/)
 ![GitHub last commit](https://img.shields.io/github/last-commit/ASR4792/EasyQarz-EMI-Calculator)
 
 ## Course Information
@@ -39,17 +39,17 @@ EasyQarz is a Streamlit web application for calculating loan EMIs with Islamic b
    Access at http://localhost:8503
 
 ### Deployment
-Live App: EasyQarz on Streamlit Share
-GitHub Repository: ASR4792/EasyQarz-EMI-Calculator
+- Live App: [EasyQarz on Streamlit Share](https://easyapprz-emi-calculator-nfn8ayj2hfrhplfkkknfex.streamlit.app/)
+- GitHub Repository: ASR4792/EasyQarz-EMI-Calculator
 
 ### How to Use
-Adjust loan parameters using interactive sliders:
-Loan Amount (PKR 50,000 to 10,000,000)
-Annual Rate (5% to 25%)
-Tenure (1 to 25 years)
-Toggle between Conventional/Islamic modes
-View real-time updates of:
-Monthly payment amount
-Total interest/profit
-Payment composition charts
-Detailed amortization schedule
+- Adjust loan parameters using interactive sliders:
+- Loan Amount (PKR 50,000 to 10,000,000)
+- Annual Rate (5% to 25%)
+- Tenure (1 to 25 years)
+- Toggle between Conventional/Islamic modes
+- View real-time updates of:
+- Monthly payment amount
+- Total interest/profit
+- Payment composition charts
+- Detailed amortization schedule
